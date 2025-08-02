@@ -195,6 +195,11 @@ export default function DashboardPage() {
               <p className="text-2xl font-bold text-warm-brown-900">
                 {stats.totalAthletes || 0}
               </p>
+              {stats.totalAthletes === 0 && (
+                <p className="text-sm text-warm-brown-500 mt-1">
+                  Athletes will appear as they join
+                </p>
+              )}
             </CardContent>
           </Card>
 
@@ -211,6 +216,11 @@ export default function DashboardPage() {
               <p className="text-2xl font-bold text-warm-brown-900">
                 {stats.pendingRequests || 0}
               </p>
+              {stats.pendingRequests === 0 && (
+                <p className="text-sm text-warm-brown-500 mt-1">
+                  No pending requests
+                </p>
+              )}
             </CardContent>
           </Card>
 
@@ -227,6 +237,11 @@ export default function DashboardPage() {
               <p className="text-2xl font-bold text-warm-brown-900">
                 {stats.activeMatches || 0}
               </p>
+              {stats.activeMatches === 0 && (
+                <p className="text-sm text-warm-brown-500 mt-1">
+                  No active matches
+                </p>
+              )}
             </CardContent>
           </Card>
         </div>

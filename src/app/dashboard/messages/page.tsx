@@ -173,7 +173,8 @@ export default function MessagesPage() {
     return (
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center py-16">
-          <div className="text-gray-500 text-xl">Loading...</div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-gold-600 mx-auto mb-4"></div>
+          <p className="text-warm-brown-700">Loading messages...</p>
         </div>
       </div>
     );
@@ -183,7 +184,7 @@ export default function MessagesPage() {
     <div className="max-w-6xl mx-auto px-4">
       <div className="mb-8 text-center">
         <div className="flex items-center justify-center space-x-2 mb-3">
-          <h1 className="text-4xl font-bold text-gray-900">
+          <h1 className="text-4xl font-bold text-warm-brown-900">
             Messages
           </h1>
           <div className="flex items-center space-x-1">
@@ -194,7 +195,7 @@ export default function MessagesPage() {
             )}
           </div>
         </div>
-        <p className="text-gray-600 text-lg">
+        <p className="text-warm-brown-700 text-lg">
           Chat with your accepted matches
         </p>
         {!isConnected && (
@@ -206,20 +207,22 @@ export default function MessagesPage() {
 
       {acceptedMatches.length === 0 ? (
         <div className="text-center py-16">
-          <MessageCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <div className="text-gray-500 text-xl mb-4">
-            No accepted matches yet
+          <div className="w-24 h-24 mx-auto mb-6 bg-cream-200 rounded-full flex items-center justify-center">
+            <MessageCircle className="w-12 h-12 text-warm-brown-500" />
           </div>
-          <p className="text-gray-400">
-            You&apos;ll be able to chat here once you accept match requests from recruiters.
+          <h3 className="text-xl font-semibold text-warm-brown-900 mb-2">
+            No Accepted Matches Yet
+          </h3>
+          <p className="text-warm-brown-600 max-w-md mx-auto">
+            You'll be able to chat here once you accept match requests from recruiters or athletes accept your requests.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
           {/* Matches List */}
-          <div className="bg-white rounded-lg shadow-md border">
-            <div className="p-4 border-b">
-              <h3 className="font-semibold text-gray-900">Your Matches</h3>
+          <div className="bg-cream-50 rounded-lg shadow-md border border-cream-300">
+            <div className="p-4 border-b border-cream-300">
+              <h3 className="font-semibold text-warm-brown-900">Your Matches</h3>
             </div>
             <div className="overflow-y-auto h-[500px]">
               {acceptedMatches.map((match) => {
@@ -228,19 +231,19 @@ export default function MessagesPage() {
                   <div
                     key={match.id}
                     onClick={() => setSelectedMatch(match)}
-                    className={`p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors ${
-                      selectedMatch?.id === match.id ? "bg-blue-50 border-blue-200" : ""
+                    className={`p-4 border-b border-cream-300 cursor-pointer hover:bg-cream-100 transition-colors ${
+                      selectedMatch?.id === match.id ? "bg-accent-gold-50 border-accent-gold-300" : ""
                     }`}
                   >
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <User className="w-5 h-5 text-blue-600" />
+                      <div className="w-10 h-10 bg-accent-gold-100 rounded-full flex items-center justify-center">
+                        <User className="w-5 h-5 text-accent-gold-600" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-gray-900 truncate">
+                        <p className="font-medium text-warm-brown-900 truncate">
                           {otherUser?.profile?.name || "Unknown User"}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-warm-brown-600">
                           {otherUser?.profile?.sport || "Athlete"}
                         </p>
                       </div>
@@ -252,20 +255,20 @@ export default function MessagesPage() {
           </div>
 
           {/* Chat Area */}
-          <div className="lg:col-span-2 bg-white rounded-lg shadow-md border">
+          <div className="lg:col-span-2 bg-cream-50 rounded-lg shadow-md border border-cream-300">
             {selectedMatch ? (
               <>
                 {/* Chat Header */}
-                <div className="p-4 border-b">
+                <div className="p-4 border-b border-cream-300">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-blue-600" />
+                    <div className="w-10 h-10 bg-accent-gold-100 rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-accent-gold-600" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">
+                      <h3 className="font-semibold text-warm-brown-900">
                         {getOtherUser(selectedMatch)?.profile?.name || "Unknown User"}
                       </h3>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-warm-brown-600">
                         {getOtherUser(selectedMatch)?.profile?.sport || "Athlete"}
                       </p>
                     </div>
@@ -276,7 +279,7 @@ export default function MessagesPage() {
                 <div className="flex-1 overflow-y-auto h-[400px] p-4">
                   {messages.length === 0 ? (
                     <div className="text-center py-8">
-                      <p className="text-gray-500">No messages yet. Start the conversation!</p>
+                      <p className="text-warm-brown-500">No messages yet. Start the conversation!</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -288,13 +291,13 @@ export default function MessagesPage() {
                           <div
                             className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
                               message.sender.id === user?.id
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-100 text-gray-900"
+                                ? "bg-accent-gold-600 text-white"
+                                : "bg-cream-200 text-warm-brown-900"
                             }`}
                           >
                             <p className="text-sm">{message.content}</p>
                             <p className={`text-xs mt-1 ${
-                              message.sender.id === user?.id ? "text-blue-100" : "text-gray-500"
+                              message.sender.id === user?.id ? "text-accent-gold-100" : "text-warm-brown-500"
                             }`}>
                               {formatTime(message.createdAt)}
                             </p>
@@ -306,7 +309,7 @@ export default function MessagesPage() {
                 </div>
 
                 {/* Message Input */}
-                <div className="p-4 border-t">
+                <div className="p-4 border-t border-cream-300">
                   <div className="space-y-2">
                     <div className="flex space-x-2">
                       <input
@@ -319,13 +322,13 @@ export default function MessagesPage() {
                         onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                         onBlur={() => emitTyping(false)}
                         placeholder="Type your message..."
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="flex-1 px-3 py-2 border border-warm-brown-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-gold-500 focus:border-transparent bg-cream-50 text-warm-brown-900"
                         disabled={isSending}
                       />
                       <button
                         onClick={sendMessage}
                         disabled={!newMessage.trim() || isSending}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-4 py-2 bg-accent-gold-600 text-white rounded-md hover:bg-accent-gold-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         <Send className="w-4 h-4" />
                       </button>
@@ -337,8 +340,8 @@ export default function MessagesPage() {
             ) : (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
-                  <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">Select a match to start chatting</p>
+                  <MessageCircle className="w-12 h-12 text-warm-brown-400 mx-auto mb-4" />
+                  <p className="text-warm-brown-600">Select a match to start chatting</p>
                 </div>
               </div>
             )}

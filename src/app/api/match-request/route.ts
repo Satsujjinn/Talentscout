@@ -28,12 +28,12 @@ export async function GET() {
         include: {
           athlete: {
             include: {
-              user: true,
+              profile: true,
             },
           },
           recruiter: {
             include: {
-              user: true,
+              profile: true,
             },
           },
         },
@@ -50,12 +50,12 @@ export async function GET() {
         include: {
           athlete: {
             include: {
-              user: true,
+              profile: true,
             },
           },
           recruiter: {
             include: {
-              user: true,
+              profile: true,
             },
           },
         },
@@ -133,18 +133,17 @@ export async function POST(request: NextRequest) {
       data: {
         recruiterId: user.id,
         athleteId: athleteId,
-        message: message || "",
         status: "pending",
       },
       include: {
         athlete: {
           include: {
-            user: true,
+            profile: true,
           },
         },
         recruiter: {
           include: {
-            user: true,
+            profile: true,
           },
         },
       },
