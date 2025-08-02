@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Image from "next/image";
 
 interface ReceivedRequestCardProps {
   request: {
@@ -98,9 +99,11 @@ export default function ReceivedRequestCard({ request }: ReceivedRequestCardProp
         <div className="flex items-center space-x-3">
           <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold">
             {request.recruiter.profile?.imageUrl ? (
-              <img 
+              <Image 
                 src={request.recruiter.profile.imageUrl} 
                 alt={request.recruiter.profile.name}
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-full object-cover"
               />
             ) : (

@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Image from "next/image";
 
 interface MatchRequestCardProps {
   request: {
@@ -61,9 +62,11 @@ export default function MatchRequestCard({ request }: MatchRequestCardProps) {
         <div className="flex items-center space-x-3">
           <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
             {request.athlete.profile?.imageUrl ? (
-              <img 
+              <Image 
                 src={request.athlete.profile.imageUrl} 
                 alt={request.athlete.profile.name}
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-full object-cover"
               />
             ) : (
