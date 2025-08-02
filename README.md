@@ -22,6 +22,56 @@ A modern talent scouting platform connecting athletes with recruiters in South A
 - **Styling**: Tailwind CSS
 - **UI Components**: Radix UI
 
+## Development
+
+### Code Quality
+
+This project uses several tools to maintain code quality:
+
+- **ESLint**: Code linting and style enforcement
+- **TypeScript**: Static type checking
+- **Husky**: Git hooks for pre-commit checks
+- **Lint-staged**: Run linters on staged files only
+
+### Available Scripts
+
+```bash
+# Development
+npm run dev              # Start Next.js development server
+npm run dev:full         # Start both Next.js and Socket.io servers
+npm run socket           # Start Socket.io server only
+
+# Building
+npm run build            # Build for production
+npm run start            # Start production server
+
+# Code Quality
+npm run lint             # Run ESLint
+npm run lint:fix         # Run ESLint with auto-fix
+npm run type-check       # Run TypeScript type checking
+
+# Database
+npm run db:push          # Push schema changes to database
+npm run db:generate      # Generate Prisma client
+```
+
+### Pre-commit Hooks
+
+The project includes pre-commit hooks that automatically:
+- Run ESLint on staged files
+- Check TypeScript compilation
+- Ensure code quality before commits
+
+### VS Code Setup
+
+The project includes VS Code configuration for optimal development experience:
+- Auto-formatting on save
+- ESLint integration
+- Tailwind CSS IntelliSense
+- TypeScript support
+
+Recommended extensions are listed in `.vscode/extensions.json`.
+
 ## Getting Started
 
 ### Prerequisites
