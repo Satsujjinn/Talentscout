@@ -9,8 +9,8 @@ import { MessageCircle, User } from "lucide-react";
 import Image from "next/image";
 import { useNotifications } from "@/components/NotificationProvider";
 
-interface AthleteCardProps {
-  athlete: {
+interface UserCardProps {
+  user: {
     id: string;
     name: string;
     bio: string | null;
@@ -22,9 +22,10 @@ interface AthleteCardProps {
       id: string;
     };
   };
+  userRole?: string;
 }
 
-export default function AthleteCard({ athlete }: AthleteCardProps) {
+export default function UserCard({ user: profileUser, userRole }: UserCardProps) {
   const { user } = useUser();
   const router = useRouter();
   const [isSending, setIsSending] = useState(false);
@@ -45,8 +46,8 @@ export default function AthleteCard({ athlete }: AthleteCardProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          athleteId: athlete.user.id,
-          message: `Hi ${athlete.name}, I'm interested in connecting with you!`,
+          athleteId: profileUser.user.id,
+          message: `Hi ${profileUser.name}, I'm interested in connecting with you!`,
         }),
       });
 
@@ -54,7 +55,7 @@ export default function AthleteCard({ athlete }: AthleteCardProps) {
         addNotification({
           type: "success",
           title: "Request Sent",
-          message: `Match request sent to ${athlete.name}!`,
+          message: `Match request sent to ${profileUser.name}!`,
         });
       } else {
         const errorData = await response.json();
@@ -80,10 +81,10 @@ export default function AthleteCard({ athlete }: AthleteCardProps) {
       <CardHeader className="pb-3">
         <div className="flex items-center space-x-4">
           <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-700 border-2 border-blue-500">
-            {athlete.imageUrl ? (
+            {profileUser.imageUrl ? (
               <Image
-                src={athlete.imageUrl}
-                alt={athlete.name}
+                src={profileUser.imageUrl}
+                alt={profileUser.name}
                 fill
                 className="object-cover"
                 sizes="64px"
@@ -95,41 +96,43 @@ export default function AthleteCard({ athlete }: AthleteCardProps) {
             )}
           </div>
           <div className="flex-1">
-            <CardTitle className="text-lg text-white">{athlete.name}</CardTitle>
-            {athlete.sport && (
-              <p className="text-sm text-blue-400 font-medium">{athlete.sport}</p>
+            <CardTitle className="text-lg text-white">{profileUser.name}</CardTitle>
+            {profileUser.sport && (
+              <p className="text-sm text-blue-400 font-medium">{profileUser.sport}</p>
             )}
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
-        {athlete.bio && (
-          <p className="text-sm text-gray-300 line-clamp-3 leading-relaxed">{athlete.bio}</p>
+        {profileUser.bio && (
+          <p className="text-sm text-gray-300 line-clamp-3 leading-relaxed">{profileUser.bio}</p>
         )}
         
-        {athlete.achievements && (
+        {profileUser.achievements && (
           <div>
             <h4 className="text-sm font-semibold text-white mb-1">Achievements</h4>
-            <p className="text-sm text-gray-400 line-clamp-2 leading-relaxed">{athlete.achievements}</p>
+            <p className="text-sm text-gray-400 line-clamp-2 leading-relaxed">{profileUser.achievements}</p>
           </div>
         )}
         
-        {athlete.stats && (
+        {profileUser.stats && (
           <div>
             <h4 className="text-sm font-semibold text-white mb-1">Stats</h4>
-            <p className="text-sm text-gray-400 line-clamp-2 leading-relaxed">{athlete.stats}</p>
+            <p className="text-sm text-gray-400 line-clamp-2 leading-relaxed">{profileUser.stats}</p>
           </div>
         )}
         
-        <Button
-          onClick={handleSendRequest}
-          disabled={isSending}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-colors"
-          size="sm"
-        >
-          <MessageCircle className="w-4 h-4 mr-2" />
-          {isSending ? "Sending..." : "Send Request"}
-        </Button>
+        {userRole === "recruiter" && (
+          <Button
+            onClick={handleSendRequest}
+            disabled={isSending}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+            size="sm"
+          >
+            <MessageCircle className="w-4 h-4 mr-2" />
+            {isSending ? "Sending..." : "Send Request"}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

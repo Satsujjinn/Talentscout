@@ -1,10 +1,10 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useUser, SignOutButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { User, Search, MessageCircle, FileText, Settings } from "lucide-react";
+import { User, Search, MessageCircle, FileText, Settings, LogOut, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import RoleSelection from "./components/RoleSelection";
 import { useRealTimeNotifications } from "@/hooks/useRealTimeNotifications";
@@ -86,6 +86,14 @@ export default function DashboardLayout({
             
             <div className="flex items-center space-x-4">
               <div className="flex space-x-1">
+                {userRole === "recruiter" && (
+                  <Link href="/dashboard/feed">
+                    <Button variant="ghost" size="sm" className="text-gray-300 hover:bg-gray-700 hover:text-white">
+                      <Heart className="w-4 h-4 mr-2" />
+                      Feed
+                    </Button>
+                  </Link>
+                )}
                 <Link href="/dashboard/discover">
                   <Button variant="ghost" size="sm" className="text-gray-300 hover:bg-gray-700 hover:text-white">
                     <Search className="w-4 h-4 mr-2" />
@@ -110,6 +118,12 @@ export default function DashboardLayout({
                     Profile
                   </Button>
                 </Link>
+                <SignOutButton>
+                  <Button variant="ghost" size="sm" className="text-red-400 hover:bg-gray-700 hover:text-red-300">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </SignOutButton>
               </div>
               
               <div className="flex items-center space-x-2">
@@ -119,6 +133,12 @@ export default function DashboardLayout({
                 <span className="text-sm text-gray-300">
                   {user.firstName || user.emailAddresses[0]?.emailAddress}
                 </span>
+                <SignOutButton>
+                  <Button variant="ghost" size="sm" className="text-red-400 hover:bg-gray-700 hover:text-red-300">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </SignOutButton>
               </div>
             </div>
           </div>

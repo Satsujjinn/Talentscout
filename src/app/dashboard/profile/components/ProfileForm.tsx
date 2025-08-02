@@ -50,13 +50,25 @@ export default function ProfileForm() {
       if (response.ok) {
         const data = await response.json();
         setProfile(data);
-        setFormData({
-          name: data.name || "",
-          bio: data.bio || "",
-          sport: data.sport || "",
-          achievements: data.achievements || "",
-          stats: data.stats || "",
-        });
+        // Handle case where profile doesn't exist yet (data is null)
+        if (data) {
+          setFormData({
+            name: data.name || "",
+            bio: data.bio || "",
+            sport: data.sport || "",
+            achievements: data.achievements || "",
+            stats: data.stats || "",
+          });
+        } else {
+          // Initialize with empty values if no profile exists
+          setFormData({
+            name: "",
+            bio: "",
+            sport: "",
+            achievements: "",
+            stats: "",
+          });
+        }
       }
     } catch (error) {
       console.error("Error fetching profile:", error);

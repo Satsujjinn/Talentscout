@@ -11,7 +11,7 @@ interface AthleteDashboardProps {
     id: string;
     firstName: string | null;
     lastName: string | null;
-    emailAddresses: string[];
+    emailAddresses: { emailAddress: string }[];
   };
 }
 
@@ -36,24 +36,38 @@ export default function AthleteDashboard({ user }: AthleteDashboardProps) {
       try {
         // Fetch match requests count
         const requestsResponse = await fetch("/api/match-request");
+        let receivedRequests = [];
         if (requestsResponse.ok) {
           const requestsData = await requestsResponse.json();
-          const receivedRequests = requestsData.filter((req: { athleteId: string }) => req.athleteId === user.id);
-          
-          // Fetch profile data
-          const profileResponse = await fetch("/api/profile");
-          const profileData = profileResponse.ok ? await profileResponse.json() : null;
-          
-          setStats({
-            profileViews: Math.floor(Math.random() * 50) + 10, // Mock data for now
-            matchRequests: receivedRequests.length,
-            activeChats: Math.floor(Math.random() * 5), // Mock data for now
-            profileComplete: !!profileData?.name,
-          });
+          receivedRequests = requestsData.filter((req: { athleteId: string }) => req.athleteId === user.id);
         }
+        
+        // Fetch profile data
+        const profileResponse = await fetch("/api/profile");
+        const profileData = profileResponse.ok ? await profileResponse.json() : null;
+        
+        // Fetch messages count (active chats)
+        const messagesResponse = await fetch("/api/messages");
+        let activeChats = 0;
+        if (messagesResponse.ok) {
+          const messagesData = await messagesResponse.json();
+                  // Count unique conversations
+        const uniqueConversations = new Set(messagesData.map((msg: { matchId: string }) => msg.matchId)).size;
+          activeChats = uniqueConversations;
+        }
+        
+        // Calculate profile views based on match requests and profile completeness
+        const profileViews = receivedRequests.length * 3 + (profileData?.name ? 15 : 0);
+        
+        setStats({
+          profileViews: profileViews,
+          matchRequests: receivedRequests.length,
+          activeChats: activeChats,
+          profileComplete: !!profileData?.name,
+        });
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-              }
+      }
     };
 
     fetchDashboardData();
@@ -73,7 +87,33 @@ export default function AthleteDashboard({ user }: AthleteDashboardProps) {
         </CardContent>
       </Card>
 
-      {/* Quick Actions */}
+      {/* Profile Completion Alert */}
+      {!stats.profileComplete && (
+        <Card className="bg-gradient-to-r from-blue-900 to-blue-800 border-blue-700 shadow-xl">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center">
+                <User className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-white mb-1">
+                  Complete Your Profile
+                </h3>
+                <p className="text-blue-200">
+                  Create your profile to be discovered by recruiters and start connecting!
+                </p>
+              </div>
+              <Link href="/dashboard/profile">
+                <Button className="bg-white text-blue-900 hover:bg-blue-50 font-semibold">
+                  Create Profile
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Profile Management */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Profile Card */}
         <Card className="bg-gray-800 border-gray-700 shadow-xl hover:shadow-2xl transition-all duration-300">
@@ -109,8 +149,8 @@ export default function AthleteDashboard({ user }: AthleteDashboardProps) {
           <CardContent>
             <p className="text-gray-300 mb-4">
               {stats.matchRequests > 0 
-                ? `You have ${stats.matchRequests} pending request${stats.matchRequests > 1 ? 's' : ''}.`
-                : "No pending requests from recruiters."
+                ? `You have ${stats.matchRequests} pending request${stats.matchRequests > 1 ? 's' : ''} from recruiters.`
+                : "No pending requests from recruiters yet."
               }
             </p>
             <Link href="/dashboard/requests/received">

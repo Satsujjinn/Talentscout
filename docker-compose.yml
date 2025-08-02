@@ -13,5 +13,17 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  app:
+    build: .
+    container_name: talent-scout-app
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://talent_scout_user:talent_scout_password@postgres:5432/talent_scout_za
+      - NODE_ENV=production
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
 volumes:
   postgres_data: 
