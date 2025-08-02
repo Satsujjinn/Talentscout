@@ -188,18 +188,19 @@ export default function DashboardPage() {
                 <div className="p-2 rounded-lg bg-accent-gold-100">
                   <Users className="w-5 h-5 text-accent-gold-600" />
                 </div>
-                <CardTitle className="text-lg text-warm-brown-900">Total Athletes</CardTitle>
+                <CardTitle className="text-lg text-warm-brown-900">Available Athletes</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold text-warm-brown-900">
                 {stats.totalAthletes || 0}
               </p>
-              {stats.totalAthletes === 0 && (
-                <p className="text-sm text-warm-brown-500 mt-1">
-                  Athletes will appear as they join
-                </p>
-              )}
+              <p className="text-sm text-warm-brown-500 mt-1">
+                {stats.totalAthletes === 0 
+                  ? "No athletes available yet" 
+                  : "Athletes ready to discover"
+                }
+              </p>
             </CardContent>
           </Card>
 
@@ -216,11 +217,12 @@ export default function DashboardPage() {
               <p className="text-2xl font-bold text-warm-brown-900">
                 {stats.pendingRequests || 0}
               </p>
-              {stats.pendingRequests === 0 && (
-                <p className="text-sm text-warm-brown-500 mt-1">
-                  No pending requests
-                </p>
-              )}
+              <p className="text-sm text-warm-brown-500 mt-1">
+                {stats.pendingRequests === 0 
+                  ? "No pending requests" 
+                  : "Requests awaiting response"
+                }
+              </p>
             </CardContent>
           </Card>
 
@@ -237,13 +239,34 @@ export default function DashboardPage() {
               <p className="text-2xl font-bold text-warm-brown-900">
                 {stats.activeMatches || 0}
               </p>
-              {stats.activeMatches === 0 && (
-                <p className="text-sm text-warm-brown-500 mt-1">
-                  No active matches
-                </p>
-              )}
+              <p className="text-sm text-warm-brown-500 mt-1">
+                {stats.activeMatches === 0 
+                  ? "No active matches" 
+                  : "Successful connections"
+                }
+              </p>
             </CardContent>
           </Card>
+        </div>
+      )}
+
+      {/* Empty State for Athletes */}
+      {userRole === "athlete" && (
+        <div className="text-center py-8">
+          <div className="w-16 h-16 bg-accent-gold-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <User className="w-8 h-8 text-accent-gold-600" />
+          </div>
+          <h3 className="text-lg font-semibold text-warm-brown-900 mb-2">
+            Welcome to Talent Scout ZA!
+          </h3>
+          <p className="text-warm-brown-700 mb-4 max-w-md mx-auto">
+            Complete your profile to start connecting with recruiters and showcasing your talent to the Western Cape sports community.
+          </p>
+          <Link href="/dashboard/profile">
+            <Button className="bg-accent-gold-600 hover:bg-accent-gold-700">
+              Complete Your Profile
+            </Button>
+          </Link>
         </div>
       )}
     </div>

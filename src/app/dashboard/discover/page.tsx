@@ -162,35 +162,39 @@ export default function DiscoverPage() {
 
       {athletes.length === 0 ? (
         <div className="text-center py-16">
-          <div className="w-24 h-24 mx-auto mb-6 bg-cream-200 rounded-full flex items-center justify-center">
-            <svg className="w-12 h-12 text-warm-brown-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-24 h-24 bg-accent-gold-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-12 h-12 text-accent-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </div>
           <h3 className="text-xl font-semibold text-warm-brown-900 mb-2">
             No Athletes Available Yet
           </h3>
-          <p className="text-warm-brown-600 max-w-md mx-auto">
+          <p className="text-warm-brown-700 mb-4 max-w-md mx-auto">
             Athletes will appear here once they create their profiles and join the platform. 
-            The talent pool will grow as more athletes discover Talent Scout ZA.
+            Encourage talented athletes to sign up and showcase their skills!
           </p>
+          <div className="text-sm text-warm-brown-500">
+            <p>Share the platform with athletes you know:</p>
+            <p className="font-medium text-accent-gold-700">talent-scout-za.com</p>
+          </div>
         </div>
       ) : filteredAthletes.length === 0 ? (
         <div className="text-center py-16">
-          <div className="w-24 h-24 mx-auto mb-6 bg-cream-200 rounded-full flex items-center justify-center">
-            <svg className="w-12 h-12 text-warm-brown-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-24 h-24 bg-accent-gold-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-12 h-12 text-accent-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
           <h3 className="text-xl font-semibold text-warm-brown-900 mb-2">
             No Athletes Match Your Search
           </h3>
-          <p className="text-warm-brown-600 max-w-md mx-auto">
-            Try adjusting your search criteria or filters to find athletes that match your requirements.
+          <p className="text-warm-brown-700 mb-4">
+            Try adjusting your search criteria or browse all available athletes.
           </p>
           <button 
             onClick={handleClear}
-            className="mt-4 px-6 py-2 bg-accent-gold-600 text-white rounded-lg hover:bg-accent-gold-700 transition-colors"
+            className="bg-accent-gold-600 text-white px-6 py-2 rounded-lg hover:bg-accent-gold-700 transition-colors"
           >
             Clear Filters
           </button>
