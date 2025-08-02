@@ -8,4 +8,7 @@ npm run lint
 # Check TypeScript compilation
 npx tsc --noEmit
 
+# Run tests
+npm run test
+
 echo "✅ Pre-commit checks passed!"

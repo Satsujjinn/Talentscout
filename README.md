@@ -30,6 +30,8 @@ This project uses several tools to maintain code quality:
 
 - **ESLint**: Code linting and style enforcement
 - **TypeScript**: Static type checking
+- **Jest**: Unit testing framework
+- **React Testing Library**: Component testing utilities
 - **Husky**: Git hooks for pre-commit checks
 - **Lint-staged**: Run linters on staged files only
 
@@ -49,6 +51,11 @@ npm run start            # Start production server
 npm run lint             # Run ESLint
 npm run lint:fix         # Run ESLint with auto-fix
 npm run type-check       # Run TypeScript type checking
+
+# Testing
+npm run test             # Run tests
+npm run test:watch       # Run tests in watch mode
+npm run test:coverage    # Run tests with coverage report
 
 # Database
 npm run db:push          # Push schema changes to database
@@ -210,11 +217,18 @@ Profile images are uploaded to Cloudinary with automatic optimization:
    node socket-server.js
    ```
 
-## Development
+## Testing
 
 ### Running Tests
 ```bash
-npm run lint
+# Run all tests
+npm run test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
 ```
 
 ### Database Management
