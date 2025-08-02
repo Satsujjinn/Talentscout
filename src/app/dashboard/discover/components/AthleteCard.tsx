@@ -76,10 +76,10 @@ export default function AthleteCard({ athlete }: AthleteCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden hover:shadow-lg transition-all duration-200 hover:scale-[1.02] border-cream-300">
       <CardHeader className="pb-3">
         <div className="flex items-center space-x-4">
-          <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-200">
+          <div className="relative w-16 h-16 rounded-full overflow-hidden bg-cream-200 border-2 border-accent-gold-200">
             {athlete.imageUrl ? (
               <Image
                 src={athlete.imageUrl}
@@ -90,41 +90,41 @@ export default function AthleteCard({ athlete }: AthleteCardProps) {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <User className="w-8 h-8 text-gray-400" />
+                <User className="w-8 h-8 text-warm-brown-400" />
               </div>
             )}
           </div>
           <div className="flex-1">
-            <CardTitle className="text-lg">{athlete.name}</CardTitle>
+            <CardTitle className="text-lg text-warm-brown-900">{athlete.name}</CardTitle>
             {athlete.sport && (
-              <p className="text-sm text-gray-600">{athlete.sport}</p>
+              <p className="text-sm text-accent-gold-700 font-medium">{athlete.sport}</p>
             )}
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
         {athlete.bio && (
-          <p className="text-sm text-gray-700 line-clamp-3">{athlete.bio}</p>
+          <p className="text-sm text-warm-brown-700 line-clamp-3 leading-relaxed">{athlete.bio}</p>
         )}
         
         {athlete.achievements && (
           <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-1">Achievements</h4>
-            <p className="text-sm text-gray-600 line-clamp-2">{athlete.achievements}</p>
+            <h4 className="text-sm font-semibold text-warm-brown-900 mb-1">Achievements</h4>
+            <p className="text-sm text-warm-brown-600 line-clamp-2 leading-relaxed">{athlete.achievements}</p>
           </div>
         )}
         
         {athlete.stats && (
           <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-1">Stats</h4>
-            <p className="text-sm text-gray-600 line-clamp-2">{athlete.stats}</p>
+            <h4 className="text-sm font-semibold text-warm-brown-900 mb-1">Stats</h4>
+            <p className="text-sm text-warm-brown-600 line-clamp-2 leading-relaxed">{athlete.stats}</p>
           </div>
         )}
         
         <Button
           onClick={handleSendRequest}
           disabled={isSending}
-          className="w-full"
+          className="w-full bg-accent-gold-600 hover:bg-accent-gold-700 text-white"
           size="sm"
         >
           <MessageCircle className="w-4 h-4 mr-2" />

@@ -142,8 +142,8 @@ export default function ProfileForm() {
     return (
       <div className="max-w-2xl mx-auto">
         <div className="text-center py-16">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-gray-500" />
-          <div className="text-gray-500 text-xl">Loading profile...</div>
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-accent-gold-600" />
+          <div className="text-warm-brown-700 text-xl">Loading profile...</div>
         </div>
       </div>
     );
@@ -151,15 +151,15 @@ export default function ProfileForm() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <Card>
+      <Card className="border-cream-300">
         <CardHeader>
-          <CardTitle>Edit Profile</CardTitle>
+          <CardTitle className="text-warm-brown-900">Edit Profile</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Profile Image */}
             <div className="flex items-center space-x-4">
-              <div className="relative w-20 h-20 rounded-full overflow-hidden bg-gray-200">
+              <div className="relative w-20 h-20 rounded-full overflow-hidden bg-cream-200 border-2 border-accent-gold-200">
                 {profile?.imageUrl ? (
                   <Image
                     src={profile.imageUrl}
@@ -170,13 +170,13 @@ export default function ProfileForm() {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <Camera className="w-8 h-8 text-gray-400" />
+                    <Camera className="w-8 h-8 text-warm-brown-400" />
                   </div>
                 )}
               </div>
               <div>
                 <Label htmlFor="image-upload" className="cursor-pointer">
-                  <Button type="button" variant="outline" size="sm" disabled={isUploading}>
+                  <Button type="button" variant="outline" size="sm" disabled={isUploading} className="border-warm-brown-300 text-warm-brown-700 hover:bg-cream-200">
                     {isUploading ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -202,7 +202,7 @@ export default function ProfileForm() {
 
             {/* Name */}
             <div>
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name" className="text-warm-brown-900">Name</Label>
               <Input
                 id="name"
                 value={formData.name}
@@ -213,7 +213,7 @@ export default function ProfileForm() {
 
             {/* Bio */}
             <div>
-              <Label htmlFor="bio">Bio</Label>
+              <Label htmlFor="bio" className="text-warm-brown-900">Bio</Label>
               <Textarea
                 id="bio"
                 value={formData.bio}
@@ -225,7 +225,7 @@ export default function ProfileForm() {
 
             {/* Sport */}
             <div>
-              <Label htmlFor="sport">Sport</Label>
+              <Label htmlFor="sport" className="text-warm-brown-900">Sport</Label>
               <Input
                 id="sport"
                 value={formData.sport}
@@ -236,7 +236,7 @@ export default function ProfileForm() {
 
             {/* Achievements */}
             <div>
-              <Label htmlFor="achievements">Achievements</Label>
+              <Label htmlFor="achievements" className="text-warm-brown-900">Achievements</Label>
               <Textarea
                 id="achievements"
                 value={formData.achievements}
@@ -248,7 +248,7 @@ export default function ProfileForm() {
 
             {/* Stats */}
             <div>
-              <Label htmlFor="stats">Stats</Label>
+              <Label htmlFor="stats" className="text-warm-brown-900">Stats</Label>
               <Textarea
                 id="stats"
                 value={formData.stats}
@@ -268,7 +268,7 @@ export default function ProfileForm() {
               </div>
             )}
 
-            <Button type="submit" disabled={isSaving} className="w-full">
+            <Button type="submit" disabled={isSaving} className="w-full bg-accent-gold-600 hover:bg-accent-gold-700 text-white">
               {isSaving ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />

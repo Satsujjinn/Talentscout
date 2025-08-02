@@ -15,7 +15,7 @@ const sports = [
   "All Sports",
   "Rugby",
   "Cricket", 
-  "Soccer",
+  "Football",
   "Netball",
   "Athletics",
   "Swimming",
@@ -49,7 +49,7 @@ export default function SearchAndFilter({ onSearch, onFilter, onClear }: SearchA
   };
 
   return (
-    <Card className="mb-6">
+    <Card className="mb-6 border-cream-300">
       <CardContent className="p-6">
         <form onSubmit={handleSearch} className="space-y-4">
           {/* Search Bar */}
@@ -61,13 +61,14 @@ export default function SearchAndFilter({ onSearch, onFilter, onClear }: SearchA
               onChange={(e) => setSearchQuery(e.target.value)}
               className="flex-1"
             />
-            <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+            <Button type="submit" className="bg-accent-gold-600 hover:bg-accent-gold-700 text-white">
               Search
             </Button>
             <Button 
               type="button" 
               variant="outline" 
               onClick={handleClear}
+              className="border-warm-brown-300 text-warm-brown-700 hover:bg-cream-200"
             >
               Clear
             </Button>
@@ -75,7 +76,7 @@ export default function SearchAndFilter({ onSearch, onFilter, onClear }: SearchA
 
           {/* Sport Filter */}
           <div>
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Filter by Sport:</h3>
+            <h3 className="text-sm font-medium text-warm-brown-700 mb-2">Filter by Sport:</h3>
             <div className="flex flex-wrap gap-2">
               {sports.map((sport) => (
                 <Button
@@ -84,7 +85,11 @@ export default function SearchAndFilter({ onSearch, onFilter, onClear }: SearchA
                   variant={selectedSport === sport ? "default" : "outline"}
                   size="sm"
                   onClick={() => handleFilter(sport)}
-                  className={selectedSport === sport ? "bg-blue-600 hover:bg-blue-700" : ""}
+                  className={
+                    selectedSport === sport 
+                      ? "bg-accent-gold-600 hover:bg-accent-gold-700 text-white" 
+                      : "border-warm-brown-300 text-warm-brown-700 hover:bg-cream-200"
+                  }
                 >
                   {sport}
                 </Button>

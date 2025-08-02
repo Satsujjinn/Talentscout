@@ -12,10 +12,10 @@ export default async function ProfilePage() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-warm-brown-900 mb-2">
           Your Profile
         </h1>
-        <p className="text-gray-600">
+        <p className="text-warm-brown-700">
           Create and manage your athlete profile to attract recruiters.
         </p>
       </div>
