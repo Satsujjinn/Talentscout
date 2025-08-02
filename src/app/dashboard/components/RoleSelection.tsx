@@ -1,19 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { User, Building } from "lucide-react";
 
 interface RoleSelectionProps {
   user: {
     id: string;
-    firstName: string | null;
-    lastName: string | null;
     emailAddresses: string[];
   };
 }
 
-export default function RoleSelection({ user }: RoleSelectionProps) {
+export default function RoleSelection() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -34,10 +33,10 @@ export default function RoleSelection({ user }: RoleSelectionProps) {
         // Reload the page to show the appropriate dashboard
         window.location.reload();
       } else {
-        const error = await response.json();
-        setMessage(error.error || "Error setting role. Please try again.");
+        const errorData = await response.json();
+        setMessage(errorData.error || "Error setting role. Please try again.");
       }
-    } catch (error) {
+    } catch {
       setMessage("Error setting role. Please try again.");
     } finally {
       setIsLoading(false);
@@ -48,37 +47,37 @@ export default function RoleSelection({ user }: RoleSelectionProps) {
     <div className="max-w-md mx-auto mt-10">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-gray-900">
-            Choose Your Role
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-gray-600 mb-6">
-            Please select whether you are an athlete or a recruiter to continue.
+          <CardTitle className="text-center">Choose Your Role</CardTitle>
+          <p className="text-center text-gray-600">
+            Please select your role to continue
           </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Button
+            onClick={() => handleRoleSelection("athlete")}
+            disabled={isLoading}
+            className="w-full h-16 text-lg"
+            variant="outline"
+          >
+            <User className="w-6 h-6 mr-3" />
+            I&apos;m an Athlete
+          </Button>
+          
+          <Button
+            onClick={() => handleRoleSelection("recruiter")}
+            disabled={isLoading}
+            className="w-full h-16 text-lg"
+            variant="outline"
+          >
+            <Building className="w-6 h-6 mr-3" />
+            I&apos;m a Recruiter
+          </Button>
           
           {message && (
-            <div className="mb-4 p-3 rounded-md bg-red-100 text-red-700">
+            <div className="p-3 rounded-lg bg-red-100 text-red-700 text-sm">
               {message}
             </div>
           )}
-
-          <div className="space-y-4">
-            <Button 
-              onClick={() => handleRoleSelection("athlete")}
-              disabled={isLoading}
-              className="w-full bg-blue-600 hover:bg-blue-700"
-            >
-              {isLoading ? "Setting..." : "I'm an Athlete"}
-            </Button>
-            <Button 
-              onClick={() => handleRoleSelection("recruiter")}
-              disabled={isLoading}
-              className="w-full bg-green-600 hover:bg-green-700"
-            >
-              {isLoading ? "Setting..." : "I'm a Recruiter"}
-            </Button>
-          </div>
         </CardContent>
       </Card>
     </div>

@@ -9,13 +9,16 @@ const io = new Server(httpServer, {
   cors: {
     origin: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
     methods: ["GET", "POST"]
-  }
+  },
+  pingTimeout: 60000,
+  pingInterval: 25000,
 });
 
 // Store user socket mappings
 const userSockets = new Map();
 const matchRooms = new Map();
 
+// Middleware for authentication
 io.use((socket, next) => {
   const userId = socket.handshake.auth.userId;
   if (!userId) {
@@ -26,8 +29,6 @@ io.use((socket, next) => {
 });
 
 io.on('connection', (socket) => {
-  console.log(`User ${socket.userId} connected`);
-  
   // Store user socket mapping
   userSockets.set(socket.userId, socket.id);
 
@@ -53,7 +54,6 @@ io.on('connection', (socket) => {
 
       socket.join(`match:${matchId}`);
       matchRooms.set(socket.id, matchId);
-      console.log(`User ${socket.userId} joined match ${matchId}`);
     } catch (error) {
       console.error('Error joining match:', error);
       socket.emit('error', { message: 'Error joining match' });
@@ -64,7 +64,6 @@ io.on('connection', (socket) => {
   socket.on('leave-match', ({ matchId }) => {
     socket.leave(`match:${matchId}`);
     matchRooms.delete(socket.id);
-    console.log(`User ${socket.userId} left match ${matchId}`);
   });
 
   // Handle sending messages
@@ -156,7 +155,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log(`User ${socket.userId} disconnected`);
     userSockets.delete(socket.userId);
     matchRooms.delete(socket.id);
   });
@@ -187,6 +185,13 @@ httpServer.listen(PORT, () => {
 // Graceful shutdown
 process.on('SIGTERM', () => {
   console.log('SIGTERM received, shutting down gracefully');
+  httpServer.close(() => {
+    console.log('Process terminated');
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received, shutting down gracefully');
   httpServer.close(() => {
     console.log('Process terminated');
   });

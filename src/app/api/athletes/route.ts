@@ -1,36 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const user = await currentUser();
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // Check if user is a recruiter
-    const dbUser = await prisma.user.findUnique({
-      where: { id: user.id },
-    });
-
-    if (!dbUser || dbUser.role !== "recruiter") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // Fetch all athlete profiles
-    const athletes = await prisma.profile.findMany({
-      where: {
-        user: {
-          role: "athlete"
-        }
-      },
+    const athletes = await prisma.athlete.findMany({
       include: {
-        user: true
+        user: {
+          select: {
+            id: true,
+          },
+        },
       },
-      orderBy: {
-        createdAt: "desc"
-      }
     });
 
     return NextResponse.json(athletes);

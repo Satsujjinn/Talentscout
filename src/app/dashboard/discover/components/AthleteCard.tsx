@@ -1,8 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { MessageCircle, User } from "lucide-react";
+import Image from "next/image";
 import { useNotifications } from "@/components/NotificationProvider";
 
 interface AthleteCardProps {
@@ -18,17 +22,21 @@ interface AthleteCardProps {
       id: string;
     };
   };
-  currentUserId: string;
 }
 
-export default function AthleteCard({ athlete, currentUserId }: AthleteCardProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("");
+export default function AthleteCard({ athlete }: AthleteCardProps) {
+  const { user } = useUser();
+  const router = useRouter();
+  const [isSending, setIsSending] = useState(false);
   const { addNotification } = useNotifications();
 
   const handleSendRequest = async () => {
-    setIsLoading(true);
-    setMessage("");
+    if (!user) {
+      router.push("/sign-in");
+      return;
+    }
+
+    setIsSending(true);
 
     try {
       const response = await fetch("/api/match-request", {
@@ -37,108 +45,90 @@ export default function AthleteCard({ athlete, currentUserId }: AthleteCardProps
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          recruiterId: currentUserId,
           athleteId: athlete.user.id,
+          message: `Hi ${athlete.name}, I'm interested in connecting with you!`,
         }),
       });
 
       if (response.ok) {
-        setMessage("Match request sent successfully!");
         addNotification({
-          type: "match_request",
-          title: "Match Request Sent",
-          message: `Request sent to ${athlete.name} successfully!`,
+          type: "success",
+          title: "Request Sent",
+          message: `Match request sent to ${athlete.name}!`,
         });
       } else {
-        const error = await response.json();
-        setMessage(error.error || "Error sending request. Please try again.");
+        const errorData = await response.json();
+        addNotification({
+          type: "error",
+          title: "Error",
+          message: errorData.error || "Failed to send request",
+        });
       }
     } catch (error) {
-      setMessage("Error sending request. Please try again.");
+      addNotification({
+        type: "error",
+        title: "Error",
+        message: "Failed to send request. Please try again.",
+      });
     } finally {
-      setIsLoading(false);
+      setIsSending(false);
     }
   };
 
   return (
-    <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      {/* Profile Photo */}
-      <div className="relative h-48 bg-gradient-to-br from-blue-400 to-purple-500">
-        {athlete.imageUrl ? (
-          <img 
-            src={athlete.imageUrl} 
-            alt={athlete.name}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <span className="text-6xl text-white font-bold">
-              {athlete.name.charAt(0).toUpperCase()}
-            </span>
-          </div>
-        )}
-        <div className="absolute top-3 right-3">
-          {athlete.sport && (
-            <span className="bg-white/90 backdrop-blur-sm text-blue-600 px-2 py-1 rounded-full text-xs font-medium">
-              {athlete.sport}
-            </span>
-          )}
-        </div>
-      </div>
-      
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <CardHeader className="pb-3">
-        <div className="flex items-center space-x-3">
-          <div className="flex-1 min-w-0">
-            <CardTitle className="text-lg font-semibold truncate">{athlete.name}</CardTitle>
+        <div className="flex items-center space-x-4">
+          <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-200">
+            {athlete.imageUrl ? (
+              <Image
+                src={athlete.imageUrl}
+                alt={athlete.name}
+                fill
+                className="object-cover"
+                sizes="64px"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <User className="w-8 h-8 text-gray-400" />
+              </div>
+            )}
+          </div>
+          <div className="flex-1">
+            <CardTitle className="text-lg">{athlete.name}</CardTitle>
             {athlete.sport && (
-              <p className="text-sm text-blue-600 font-medium">{athlete.sport}</p>
+              <p className="text-sm text-gray-600">{athlete.sport}</p>
             )}
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3 pt-0">
+      <CardContent className="space-y-3">
         {athlete.bio && (
-          <div>
-            <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
-              {athlete.bio}
-            </p>
-          </div>
+          <p className="text-sm text-gray-700 line-clamp-3">{athlete.bio}</p>
         )}
-
+        
         {athlete.achievements && (
-          <div className="bg-yellow-50 p-3 rounded-lg">
-            <h4 className="font-semibold text-xs text-yellow-800 mb-1 uppercase tracking-wide">🏆 Achievements</h4>
-            <p className="text-xs text-yellow-700 line-clamp-2 leading-relaxed">
-              {athlete.achievements}
-            </p>
+          <div>
+            <h4 className="text-sm font-medium text-gray-900 mb-1">Achievements</h4>
+            <p className="text-sm text-gray-600 line-clamp-2">{athlete.achievements}</p>
           </div>
         )}
-
+        
         {athlete.stats && (
-          <div className="bg-blue-50 p-3 rounded-lg">
-            <h4 className="font-semibold text-xs text-blue-800 mb-1 uppercase tracking-wide">📊 Stats</h4>
-            <p className="text-xs text-blue-700 line-clamp-2 leading-relaxed">
-              {athlete.stats}
-            </p>
+          <div>
+            <h4 className="text-sm font-medium text-gray-900 mb-1">Stats</h4>
+            <p className="text-sm text-gray-600 line-clamp-2">{athlete.stats}</p>
           </div>
         )}
-
-        {message && (
-          <div className={`p-2 rounded-lg text-xs ${
-            message.includes("successfully") 
-              ? "bg-green-100 text-green-700 border border-green-200" 
-              : "bg-red-100 text-red-700 border border-red-200"
-          }`}>
-            {message}
-          </div>
-        )}
-
-        <Button 
-          onClick={handleSendRequest} 
-          disabled={isLoading}
-          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium"
+        
+        <Button
+          onClick={handleSendRequest}
+          disabled={isSending}
+          className="w-full"
+          size="sm"
         >
-          {isLoading ? "Sending..." : "Send Match Request"}
+          <MessageCircle className="w-4 h-4 mr-2" />
+          {isSending ? "Sending..." : "Send Request"}
         </Button>
       </CardContent>
     </Card>

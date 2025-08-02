@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { MessageCircle, Send, User, Wifi, WifiOff } from "lucide-react";
@@ -52,6 +52,12 @@ export default function MessagesPage() {
   const { addNotification } = useNotifications();
   const { emitTyping } = useTypingIndicator(selectedMatch?.id || "", user?.id || "");
 
+  // Memoize getOtherUser function to prevent unnecessary re-renders
+  const getOtherUser = useCallback((match: MatchRequest) => {
+    if (!user) return null;
+    return match.athlete.id === user.id ? match.recruiter : match.athlete;
+  }, [user]);
+
   useEffect(() => {
     if (!isLoaded) return;
 
@@ -90,7 +96,7 @@ export default function MessagesPage() {
         socketManager.unsubscribeFromMessages(selectedMatch.id);
       };
     }
-  }, [selectedMatch, addNotification]);
+  }, [selectedMatch, addNotification, getOtherUser]);
 
   const fetchAcceptedMatches = async () => {
     try {
@@ -154,11 +160,6 @@ export default function MessagesPage() {
     } finally {
       setIsSending(false);
     }
-  };
-
-  const getOtherUser = (match: MatchRequest) => {
-    if (!user) return null;
-    return match.athlete.id === user.id ? match.recruiter : match.athlete;
   };
 
   const formatTime = (dateString: string) => {
