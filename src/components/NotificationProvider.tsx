@@ -1,12 +1,11 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { useUser } from "@clerk/nextjs";
 import { Bell, X } from "lucide-react";
 
 type Notification = {
   id: string;
-  type: "message" | "match_request";
+  type: "message" | "match_request" | "success" | "error";
   title: string;
   message: string;
   timestamp: Date;
@@ -31,7 +30,6 @@ export function useNotifications() {
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const { user } = useUser();
 
   const addNotification = (notification: Omit<Notification, "id" | "timestamp">) => {
     const newNotification: Notification = {

@@ -35,14 +35,6 @@ export function TypingIndicator({ matchId, currentUserId }: TypingIndicatorProps
     setIsTyping(typingUsers.length > 0);
   }, [typingUsers]);
 
-  const emitTyping = (isTyping: boolean) => {
-    socketManager.getSocket()?.emit('typing', {
-      matchId,
-      userId: currentUserId,
-      isTyping,
-    });
-  };
-
   if (!isTyping) return null;
 
   return (

@@ -6,10 +6,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { User, Search, MessageCircle, FileText, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import RoleSelection from "./components/RoleSelection";
-import AthleteDashboard from "./components/AthleteDashboard";
-import RecruiterDashboard from "./components/RecruiterDashboard";
 import { useRealTimeNotifications } from "@/hooks/useRealTimeNotifications";
 
 export default function DashboardLayout({
@@ -53,10 +50,10 @@ export default function DashboardLayout({
 
   if (!isLoaded || isLoading) {
     return (
-      <div className="min-h-screen bg-cream-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-gold-600 mx-auto mb-4"></div>
-          <p className="text-warm-brown-700">Loading...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-300">Loading...</p>
         </div>
       </div>
     );
@@ -69,20 +66,20 @@ export default function DashboardLayout({
   // Show role selection if user hasn't set their role yet
   if (userRole === null) {
     return (
-      <div className="min-h-screen bg-cream-50 p-4">
-        <RoleSelection user={user} />
+      <div className="min-h-screen bg-gray-900 p-4">
+        <RoleSelection />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-cream-50">
+    <div className="min-h-screen bg-gray-900">
       {/* Navigation */}
-      <nav className="bg-cream-100 border-b border-cream-300 shadow-sm">
+      <nav className="bg-gray-800 border-b border-gray-700 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Link href="/dashboard" className="text-xl font-bold text-warm-brown-900">
+              <Link href="/dashboard" className="text-xl font-bold text-white">
                 Talent Scout ZA
               </Link>
             </div>
@@ -90,25 +87,25 @@ export default function DashboardLayout({
             <div className="flex items-center space-x-4">
               <div className="flex space-x-1">
                 <Link href="/dashboard/discover">
-                  <Button variant="ghost" size="sm" className="text-warm-brown-700 hover:bg-cream-200">
+                  <Button variant="ghost" size="sm" className="text-gray-300 hover:bg-gray-700 hover:text-white">
                     <Search className="w-4 h-4 mr-2" />
                     Discover
                   </Button>
                 </Link>
                 <Link href="/dashboard/messages">
-                  <Button variant="ghost" size="sm" className="text-warm-brown-700 hover:bg-cream-200">
+                  <Button variant="ghost" size="sm" className="text-gray-300 hover:bg-gray-700 hover:text-white">
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Messages
                   </Button>
                 </Link>
                 <Link href="/dashboard/requests">
-                  <Button variant="ghost" size="sm" className="text-warm-brown-700 hover:bg-cream-200">
+                  <Button variant="ghost" size="sm" className="text-gray-300 hover:bg-gray-700 hover:text-white">
                     <FileText className="w-4 h-4 mr-2" />
                     Requests
                   </Button>
                 </Link>
                 <Link href="/dashboard/profile">
-                  <Button variant="ghost" size="sm" className="text-warm-brown-700 hover:bg-cream-200">
+                  <Button variant="ghost" size="sm" className="text-gray-300 hover:bg-gray-700 hover:text-white">
                     <Settings className="w-4 h-4 mr-2" />
                     Profile
                   </Button>
@@ -116,10 +113,10 @@ export default function DashboardLayout({
               </div>
               
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-accent-gold-600 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-sm text-warm-brown-700">
+                <span className="text-sm text-gray-300">
                   {user.firstName || user.emailAddresses[0]?.emailAddress}
                 </span>
               </div>

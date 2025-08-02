@@ -97,7 +97,7 @@ export default function ProfileForm() {
         const errorData = await response.json();
         setMessage(errorData.error || "Error uploading image. Please try again.");
       }
-    } catch (error) {
+    } catch {
       setMessage("Error uploading image. Please try again.");
     } finally {
       setIsUploading(false);
@@ -115,7 +115,11 @@ export default function ProfileForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          userId: user?.id,
+          imageUrl: profile?.imageUrl,
+        }),
       });
 
       if (response.ok) {
@@ -131,7 +135,7 @@ export default function ProfileForm() {
         const errorData = await response.json();
         setMessage(errorData.error || "Error updating profile. Please try again.");
       }
-    } catch (error) {
+    } catch {
       setMessage("Error updating profile. Please try again.");
     } finally {
       setIsSaving(false);
@@ -142,8 +146,8 @@ export default function ProfileForm() {
     return (
       <div className="max-w-2xl mx-auto">
         <div className="text-center py-16">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-accent-gold-600" />
-          <div className="text-warm-brown-700 text-xl">Loading profile...</div>
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-500" />
+          <div className="text-gray-300 text-xl">Loading profile...</div>
         </div>
       </div>
     );
@@ -151,15 +155,15 @@ export default function ProfileForm() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <Card className="border-cream-300">
-        <CardHeader>
-          <CardTitle className="text-warm-brown-900">Edit Profile</CardTitle>
+      <Card className="bg-gray-900 border-gray-700 shadow-xl">
+        <CardHeader className="border-b border-gray-700">
+          <CardTitle className="text-white text-xl font-semibold">Edit Profile</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Profile Image */}
             <div className="flex items-center space-x-4">
-              <div className="relative w-20 h-20 rounded-full overflow-hidden bg-cream-200 border-2 border-accent-gold-200">
+              <div className="relative w-20 h-20 rounded-full overflow-hidden bg-gray-800 border-2 border-blue-500">
                 {profile?.imageUrl ? (
                   <Image
                     src={profile.imageUrl}
@@ -170,13 +174,13 @@ export default function ProfileForm() {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <Camera className="w-8 h-8 text-warm-brown-400" />
+                    <Camera className="w-8 h-8 text-gray-400" />
                   </div>
                 )}
               </div>
               <div>
                 <Label htmlFor="image-upload" className="cursor-pointer">
-                  <Button type="button" variant="outline" size="sm" disabled={isUploading} className="border-warm-brown-300 text-warm-brown-700 hover:bg-cream-200">
+                  <Button type="button" variant="outline" size="sm" disabled={isUploading} className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
                     {isUploading ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -202,73 +206,78 @@ export default function ProfileForm() {
 
             {/* Name */}
             <div>
-              <Label htmlFor="name" className="text-warm-brown-900">Name</Label>
+              <Label htmlFor="name" className="text-gray-300 font-medium">Name</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 placeholder="Enter your name"
+                className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
 
             {/* Bio */}
             <div>
-              <Label htmlFor="bio" className="text-warm-brown-900">Bio</Label>
+              <Label htmlFor="bio" className="text-gray-300 font-medium">Bio</Label>
               <Textarea
                 id="bio"
                 value={formData.bio}
                 onChange={(e) => handleInputChange("bio", e.target.value)}
                 placeholder="Tell us about yourself..."
                 rows={3}
+                className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
 
             {/* Sport */}
             <div>
-              <Label htmlFor="sport" className="text-warm-brown-900">Sport</Label>
+              <Label htmlFor="sport" className="text-gray-300 font-medium">Sport</Label>
               <Input
                 id="sport"
                 value={formData.sport}
                 onChange={(e) => handleInputChange("sport", e.target.value)}
                 placeholder="e.g., Football, Rugby, Cricket"
+                className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
 
             {/* Achievements */}
             <div>
-              <Label htmlFor="achievements" className="text-warm-brown-900">Achievements</Label>
+              <Label htmlFor="achievements" className="text-gray-300 font-medium">Achievements</Label>
               <Textarea
                 id="achievements"
                 value={formData.achievements}
                 onChange={(e) => handleInputChange("achievements", e.target.value)}
                 placeholder="List your achievements..."
                 rows={3}
+                className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
 
             {/* Stats */}
             <div>
-              <Label htmlFor="stats" className="text-warm-brown-900">Stats</Label>
+              <Label htmlFor="stats" className="text-gray-300 font-medium">Stats</Label>
               <Textarea
                 id="stats"
                 value={formData.stats}
                 onChange={(e) => handleInputChange("stats", e.target.value)}
                 placeholder="Your key statistics..."
                 rows={3}
+                className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
 
             {message && (
               <div className={`p-3 rounded-lg text-sm ${
                 message.includes("successfully") 
-                  ? "bg-green-100 text-green-700 border border-green-200" 
-                  : "bg-red-100 text-red-700 border border-red-200"
+                  ? "bg-green-900/20 text-green-400 border border-green-700" 
+                  : "bg-red-900/20 text-red-400 border border-red-700"
               }`}>
                 {message}
               </div>
             )}
 
-            <Button type="submit" disabled={isSaving} className="w-full bg-accent-gold-600 hover:bg-accent-gold-700 text-white">
+            <Button type="submit" disabled={isSaving} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors">
               {isSaving ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />

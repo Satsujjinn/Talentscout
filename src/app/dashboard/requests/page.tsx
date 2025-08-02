@@ -59,7 +59,7 @@ export default async function RequestsPage() {
             No requests sent yet
           </div>
           <p className="text-warm-brown-400 mb-6">
-            Start by browsing athletes in the Discover section and sending match requests to talented players you'd like to connect with.
+            Start by browsing athletes in the Discover section and sending match requests to talented players you&apos;d like to connect with.
           </p>
           <Link 
             href="/dashboard/discover"

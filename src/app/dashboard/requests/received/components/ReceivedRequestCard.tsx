@@ -22,7 +22,7 @@ interface ReceivedRequestCardProps {
   currentUserId: string;
 }
 
-export default function ReceivedRequestCard({ request, currentUserId }: ReceivedRequestCardProps) {
+export default function ReceivedRequestCard({ request }: ReceivedRequestCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(request.status);
@@ -49,7 +49,7 @@ export default function ReceivedRequestCard({ request, currentUserId }: Received
         const error = await response.json();
         setMessage(error.error || "Error updating request. Please try again.");
       }
-    } catch (error) {
+    } catch {
       setMessage("Error updating request. Please try again.");
     } finally {
       setIsLoading(false);

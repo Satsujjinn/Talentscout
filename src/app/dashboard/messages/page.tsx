@@ -68,7 +68,7 @@ export default function MessagesPage() {
 
     // Connect to WebSocket
     socketManager.connect(user.id);
-    setIsConnected(socketManager.getConnectionStatus());
+    setIsConnected(socketManager.getConnectionStatus() || false);
 
     fetchAcceptedMatches();
 
@@ -210,7 +210,7 @@ export default function MessagesPage() {
             No accepted matches yet
           </div>
           <p className="text-warm-brown-400 mb-6">
-            You'll be able to chat here once you accept match requests from recruiters or athletes accept your requests. 
+            You&apos;ll be able to chat here once you accept match requests from recruiters or athletes accept your requests. 
             Start by browsing athletes and sending match requests!
           </p>
           <div className="text-sm text-warm-brown-500">

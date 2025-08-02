@@ -132,7 +132,7 @@ export default function DiscoverPage() {
     return (
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center py-16">
-          <div className="text-warm-brown-500 text-xl">Loading...</div>
+          <div className="text-gray-300 text-xl">Loading athletes...</div>
         </div>
       </div>
     );
@@ -141,13 +141,13 @@ export default function DiscoverPage() {
   return (
     <div className="max-w-6xl mx-auto px-4">
       <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold text-warm-brown-900 mb-3">
-          Discover Athletes
+        <h1 className="text-4xl font-bold text-white mb-3">
+          Discover Athletes 🔍
         </h1>
-        <p className="text-warm-brown-700 text-lg">
+        <p className="text-gray-300 text-lg">
           Browse through talented athletes in the Western Cape and find your next star player
         </p>
-        <div className="mt-4 text-sm text-warm-brown-500">
+        <div className="mt-4 text-sm text-gray-400">
           {filteredAthletes.length} of {athletes.length} athletes available
         </div>
       </div>
@@ -161,10 +161,10 @@ export default function DiscoverPage() {
 
       {filteredAthletes.length === 0 ? (
         <div className="text-center py-16">
-          <div className="text-warm-brown-500 text-xl mb-4">
+          <div className="text-gray-300 text-xl mb-4">
             {athletes.length === 0 ? "No athletes found yet." : "No athletes match your search."}
           </div>
-          <p className="text-warm-brown-400">
+          <p className="text-gray-400">
             {athletes.length === 0 
               ? "Athletes will appear here once they create their profiles."
               : "Try adjusting your search or filter criteria."
@@ -177,7 +177,6 @@ export default function DiscoverPage() {
             <AthleteCard 
               key={athlete.id} 
               athlete={athlete} 
-              currentUserId={user?.id || ""}
             />
           ))}
         </div>

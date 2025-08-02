@@ -15,7 +15,7 @@ export function MessageCounter() {
 
     // Connect to WebSocket
     socketManager.connect(user.id);
-    setIsConnected(socketManager.getConnectionStatus());
+    setIsConnected(socketManager.getConnectionStatus() || false);
 
     // Fetch initial count
     fetchUnreadCount();

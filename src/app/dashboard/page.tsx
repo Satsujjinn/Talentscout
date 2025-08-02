@@ -4,7 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
 import { User, Search, MessageCircle, FileText, TrendingUp, Users } from "lucide-react";
 import Link from "next/link";
 
@@ -92,7 +92,7 @@ export default function DashboardPage() {
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-accent-gold-50 to-cream-100 rounded-lg p-6 border border-cream-300">
         <h1 className="text-3xl font-bold text-warm-brown-900 mb-2">
-          Welcome back, {user.firstName || "User"}!
+          Welcome back, {user?.firstName || "User"}!
         </h1>
         <p className="text-warm-brown-700">
           {userRole === "recruiter" 

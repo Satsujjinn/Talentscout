@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
 
     // Send real-time notification via WebSocket
     try {
-      const socketResponse = await fetch(`${process.env.SOCKET_SERVER_URL || 'http://localhost:3001'}/api/socket/notify`, {
+      await fetch(`${process.env.SOCKET_SERVER_URL || 'http://localhost:3001'}/api/socket/notify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
