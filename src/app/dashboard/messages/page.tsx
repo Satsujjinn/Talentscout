@@ -1,0 +1,349 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { MessageCircle, Send, User, Wifi, WifiOff } from "lucide-react";
+import { useNotifications } from "@/components/NotificationProvider";
+import { socketManager } from "@/lib/socket";
+import { TypingIndicator, useTypingIndicator } from "@/components/TypingIndicator";
+
+type MatchRequest = {
+  id: string;
+  status: string;
+  createdAt: string;
+  athlete: {
+    id: string;
+    profile?: {
+      name: string;
+      sport?: string;
+      imageUrl?: string;
+    };
+  };
+  recruiter: {
+    id: string;
+    profile?: {
+      name: string;
+      sport?: string;
+      imageUrl?: string;
+    };
+  };
+};
+
+type Message = {
+  id: string;
+  content: string;
+  createdAt: string;
+  sender: {
+    id: string;
+  };
+};
+
+export default function MessagesPage() {
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
+  const [acceptedMatches, setAcceptedMatches] = useState<MatchRequest[]>([]);
+  const [selectedMatch, setSelectedMatch] = useState<MatchRequest | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSending, setIsSending] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const { addNotification } = useNotifications();
+  const { emitTyping } = useTypingIndicator(selectedMatch?.id || "", user?.id || "");
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    if (!user) {
+      router.push("/sign-in");
+      return;
+    }
+
+    // Connect to WebSocket
+    socketManager.connect(user.id);
+    setIsConnected(socketManager.getConnectionStatus());
+
+    fetchAcceptedMatches();
+
+    // Cleanup on unmount
+    return () => {
+      socketManager.disconnect();
+    };
+  }, [user, isLoaded, router]);
+
+  useEffect(() => {
+    if (selectedMatch) {
+      fetchMessages(selectedMatch.id);
+      
+      // Subscribe to real-time messages for this match
+      socketManager.subscribeToMessages(selectedMatch.id, (newMessage) => {
+        setMessages(prev => [...prev, newMessage]);
+        addNotification({
+          type: "message",
+          title: "New Message",
+          message: `New message from ${getOtherUser(selectedMatch)?.profile?.name || "Unknown User"}`,
+        });
+      });
+
+      return () => {
+        socketManager.unsubscribeFromMessages(selectedMatch.id);
+      };
+    }
+  }, [selectedMatch, addNotification]);
+
+  const fetchAcceptedMatches = async () => {
+    try {
+      const response = await fetch("/api/match-request");
+      if (response.ok) {
+        const data = await response.json();
+        const accepted = data.filter((match: MatchRequest) => match.status === "accepted");
+        setAcceptedMatches(accepted);
+      }
+    } catch (error) {
+      console.error("Error fetching matches:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchMessages = async (matchId: string) => {
+    try {
+      const response = await fetch(`/api/messages?matchRequestId=${matchId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data);
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  const sendMessage = async () => {
+    if (!selectedMatch || !newMessage.trim()) return;
+
+    setIsSending(true);
+    try {
+      // Send via WebSocket for real-time delivery
+      socketManager.sendMessage(selectedMatch.id, {
+        content: newMessage.trim(),
+      });
+
+      // Also save to database via API
+      const response = await fetch("/api/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          matchRequestId: selectedMatch.id,
+          content: newMessage.trim(),
+        }),
+      });
+
+      if (response.ok) {
+        setNewMessage("");
+        addNotification({
+          type: "message",
+          title: "Message Sent",
+          message: "Your message has been sent successfully!",
+        });
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const getOtherUser = (match: MatchRequest) => {
+    if (!user) return null;
+    return match.athlete.id === user.id ? match.recruiter : match.athlete;
+  };
+
+  const formatTime = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+  };
+
+  if (!isLoaded || isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="text-center py-16">
+          <div className="text-gray-500 text-xl">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-6xl mx-auto px-4">
+      <div className="mb-8 text-center">
+        <div className="flex items-center justify-center space-x-2 mb-3">
+          <h1 className="text-4xl font-bold text-gray-900">
+            Messages
+          </h1>
+          <div className="flex items-center space-x-1">
+            {isConnected ? (
+              <Wifi className="w-5 h-5 text-green-500" />
+            ) : (
+              <WifiOff className="w-5 h-5 text-red-500" />
+            )}
+          </div>
+        </div>
+        <p className="text-gray-600 text-lg">
+          Chat with your accepted matches
+        </p>
+        {!isConnected && (
+          <p className="text-sm text-orange-600 mt-2">
+            Connecting to real-time messaging...
+          </p>
+        )}
+      </div>
+
+      {acceptedMatches.length === 0 ? (
+        <div className="text-center py-16">
+          <MessageCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <div className="text-gray-500 text-xl mb-4">
+            No accepted matches yet
+          </div>
+          <p className="text-gray-400">
+            You&apos;ll be able to chat here once you accept match requests from recruiters.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
+          {/* Matches List */}
+          <div className="bg-white rounded-lg shadow-md border">
+            <div className="p-4 border-b">
+              <h3 className="font-semibold text-gray-900">Your Matches</h3>
+            </div>
+            <div className="overflow-y-auto h-[500px]">
+              {acceptedMatches.map((match) => {
+                const otherUser = getOtherUser(match);
+                return (
+                  <div
+                    key={match.id}
+                    onClick={() => setSelectedMatch(match)}
+                    className={`p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors ${
+                      selectedMatch?.id === match.id ? "bg-blue-50 border-blue-200" : ""
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <User className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-gray-900 truncate">
+                          {otherUser?.profile?.name || "Unknown User"}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {otherUser?.profile?.sport || "Athlete"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Chat Area */}
+          <div className="lg:col-span-2 bg-white rounded-lg shadow-md border">
+            {selectedMatch ? (
+              <>
+                {/* Chat Header */}
+                <div className="p-4 border-b">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">
+                        {getOtherUser(selectedMatch)?.profile?.name || "Unknown User"}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        {getOtherUser(selectedMatch)?.profile?.sport || "Athlete"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto h-[400px] p-4">
+                  {messages.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500">No messages yet. Start the conversation!</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {messages.map((message) => (
+                        <div
+                          key={message.id}
+                          className={`flex ${message.sender.id === user?.id ? "justify-end" : "justify-start"}`}
+                        >
+                          <div
+                            className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                              message.sender.id === user?.id
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-100 text-gray-900"
+                            }`}
+                          >
+                            <p className="text-sm">{message.content}</p>
+                            <p className={`text-xs mt-1 ${
+                              message.sender.id === user?.id ? "text-blue-100" : "text-gray-500"
+                            }`}>
+                              {formatTime(message.createdAt)}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Message Input */}
+                <div className="p-4 border-t">
+                  <div className="space-y-2">
+                    <div className="flex space-x-2">
+                      <input
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => {
+                          setNewMessage(e.target.value);
+                          emitTyping(e.target.value.length > 0);
+                        }}
+                        onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+                        onBlur={() => emitTyping(false)}
+                        placeholder="Type your message..."
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        disabled={isSending}
+                      />
+                      <button
+                        onClick={sendMessage}
+                        disabled={!newMessage.trim() || isSending}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <Send className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <TypingIndicator matchId={selectedMatch.id} currentUserId={user?.id || ""} />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500">Select a match to start chatting</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+} 

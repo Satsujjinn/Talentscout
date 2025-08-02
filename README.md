@@ -1,36 +1,203 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Talent Scout ZA
+
+A modern talent scouting platform connecting athletes with recruiters in South Africa. Built with Next.js, Prisma, and real-time messaging.
+
+## Features
+
+- **Real-time Messaging**: WebSocket-based chat system for accepted matches
+- **Profile Management**: Complete athlete and recruiter profiles with image uploads
+- **Match Requests**: Recruiters can send requests to athletes
+- **Real-time Notifications**: Instant notifications for new messages and requests
+- **Responsive Design**: Modern UI built with Tailwind CSS
+- **Authentication**: Secure user authentication with Clerk
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Backend**: Next.js API Routes, Prisma ORM
+- **Database**: PostgreSQL (via Prisma)
+- **Authentication**: Clerk
+- **Real-time**: Socket.io
+- **Image Storage**: Cloudinary
+- **Styling**: Tailwind CSS
+- **UI Components**: Radix UI
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+ 
+- PostgreSQL database
+- Clerk account for authentication
+- Cloudinary account for image storage
+
+### Environment Variables
+
+Create a `.env.local` file in the root directory:
+
+```env
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/talent_scout_za"
+
+# Authentication (Clerk)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+
+# App URLs
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+SOCKET_SERVER_URL=http://localhost:3001
+
+# Image Storage (Cloudinary)
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd talent-scout-za
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. **Set up the database**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. **Seed test data (optional)**
+   ```bash
+   npm run seed
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. **Start the development servers**
+   ```bash
+   npm run dev:full
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This will start both the Next.js app (port 3000) and the Socket.io server (port 3001).
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/                    # Next.js app router
+│   ├── api/               # API routes
+│   │   ├── athletes/      # Athlete discovery
+│   │   ├── match-request/ # Match request management
+│   │   ├── messages/      # Real-time messaging
+│   │   ├── profile/       # Profile management
+│   │   └── user/          # User management
+│   └── dashboard/         # Main application pages
+├── components/            # Reusable UI components
+├── hooks/                # Custom React hooks
+└── lib/                  # Utility libraries
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## API Endpoints
+
+### Authentication Required
+All endpoints require authentication via Clerk.
+
+- `GET /api/athletes` - Get all athlete profiles (recruiters only)
+- `GET /api/user` - Get current user info
+- `POST /api/user` - Create/update user role
+- `GET /api/profile/[userId]` - Get user profile
+- `POST /api/profile` - Create/update profile
+- `POST /api/profile/upload` - Upload profile image
+- `GET /api/match-request` - Get user's match requests
+- `POST /api/match-request` - Send match request
+- `PATCH /api/match-request/[requestId]` - Accept/decline request
+- `GET /api/messages` - Get messages for a match
+- `POST /api/messages` - Send a message
+
+## Real-time Features
+
+The application uses Socket.io for real-time communication:
+
+- **New Message Notifications**: Instant notifications when receiving messages
+- **Match Request Updates**: Real-time updates when requests are accepted/declined
+- **Typing Indicators**: Shows when someone is typing
+- **Live Chat**: Real-time messaging for accepted matches
+
+## Image Upload
+
+Profile images are uploaded to Cloudinary with automatic optimization:
+- Images are resized to 400x400px
+- Automatic quality optimization
+- Face detection for better cropping
+- Secure HTTPS URLs
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Connect your repository to Vercel
+2. Add environment variables in Vercel dashboard
+3. Deploy automatically on push to main branch
+
+### Manual Deployment
+
+1. Build the application:
+   ```bash
+   npm run build
+   ```
+
+2. Start the production server:
+   ```bash
+   npm start
+   ```
+
+3. Start the Socket.io server:
+   ```bash
+   node socket-server.js
+   ```
+
+## Development
+
+### Running Tests
+```bash
+npm run lint
+```
+
+### Database Management
+```bash
+# Generate Prisma client
+npm run db:generate
+
+# Push schema changes
+npm run db:push
+
+# Reset database (development only)
+npx prisma db push --force-reset
+```
+
+### Socket Server
+The Socket.io server runs on port 3001 and handles:
+- Real-time messaging
+- Typing indicators
+- Match request notifications
+- User presence
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+**Created by Leon Jordaan**

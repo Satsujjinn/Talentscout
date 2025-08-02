@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @unique
+  role        String    // "athlete" or "recruiter"
+  profile     Profile?
+  sentMatches MatchRequest[] @relation("RecruiterSent")
+  recdMatches MatchRequest[] @relation("AthleteReceived")
+  messages    Message[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Profile {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id])
+  name        String
+  bio         String?
+  sport       String?   // e.g., "Rugby", "Cricket"
+  achievements String?  // Text field for achievements
+  stats       String?   // Text field for stats
+  imageUrl    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model MatchRequest {
+  id          String    @id @default(cuid())
+  recruiterId String
+  athleteId   String
+  recruiter   User      @relation("RecruiterSent", fields: [recruiterId], references: [id])
+  athlete     User      @relation("AthleteReceived", fields: [athleteId], references: [id])
+  status      String    @default("pending") // "pending", "accepted", "declined"
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@unique([recruiterId, athleteId])
+}
+
+model Message {
+  id          String    @id @default(cuid())
+  content     String
+  matchId     String
+  senderId    String
+  sender      User      @relation(fields: [senderId], references: [id])
+  createdAt   DateTime  @default(now())
+  
+  @@index([matchId])
+}

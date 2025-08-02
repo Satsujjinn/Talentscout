@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    container_name: talent-scout-db
+    environment:
+      POSTGRES_DB: talent_scout_za
+      POSTGRES_USER: talent_scout_user
+      POSTGRES_PASSWORD: talent_scout_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data: 
