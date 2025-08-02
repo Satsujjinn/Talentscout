@@ -48,7 +48,7 @@ export default function RoleSelection() {
       <Card>
         <CardHeader>
           <CardTitle className="text-center">Choose Your Role</CardTitle>
-          <p className="text-center text-gray-600">
+          <p className="text-center text-warm-brown-700">
             Please select your role to continue
           </p>
         </CardHeader>

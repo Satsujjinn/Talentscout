@@ -53,10 +53,10 @@ export default function DashboardLayout({
 
   if (!isLoaded || isLoading) {
     return (
-      <div className="min-h-screen bg-[#fefefe] flex items-center justify-center">
+      <div className="min-h-screen bg-cream-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#e4a91a] mx-auto mb-4"></div>
-          <p className="text-[#6a5a3f]">Loading...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-gold-600 mx-auto mb-4"></div>
+          <p className="text-warm-brown-700">Loading...</p>
         </div>
       </div>
     );
@@ -69,20 +69,20 @@ export default function DashboardLayout({
   // Show role selection if user hasn't set their role yet
   if (userRole === null) {
     return (
-      <div className="min-h-screen bg-[#fefefe] p-4">
+      <div className="min-h-screen bg-cream-50 p-4">
         <RoleSelection user={user} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#fefefe]">
+    <div className="min-h-screen bg-cream-50">
       {/* Navigation */}
-      <nav className="bg-[#fdfcf9] border-b border-[#f5f1e6] shadow-sm">
+      <nav className="bg-cream-100 border-b border-cream-300 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Link href="/dashboard" className="text-xl font-bold text-[#6a5a3f]">
+              <Link href="/dashboard" className="text-xl font-bold text-warm-brown-900">
                 Talent Scout ZA
               </Link>
             </div>
@@ -90,25 +90,25 @@ export default function DashboardLayout({
             <div className="flex items-center space-x-4">
               <div className="flex space-x-1">
                 <Link href="/dashboard/discover">
-                  <Button variant="ghost" size="sm" className="text-[#6a5a3f] hover:bg-[#faf8f0]">
+                  <Button variant="ghost" size="sm" className="text-warm-brown-700 hover:bg-cream-200">
                     <Search className="w-4 h-4 mr-2" />
                     Discover
                   </Button>
                 </Link>
                 <Link href="/dashboard/messages">
-                  <Button variant="ghost" size="sm" className="text-[#6a5a3f] hover:bg-[#faf8f0]">
+                  <Button variant="ghost" size="sm" className="text-warm-brown-700 hover:bg-cream-200">
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Messages
                   </Button>
                 </Link>
                 <Link href="/dashboard/requests">
-                  <Button variant="ghost" size="sm" className="text-[#6a5a3f] hover:bg-[#faf8f0]">
+                  <Button variant="ghost" size="sm" className="text-warm-brown-700 hover:bg-cream-200">
                     <FileText className="w-4 h-4 mr-2" />
                     Requests
                   </Button>
                 </Link>
                 <Link href="/dashboard/profile">
-                  <Button variant="ghost" size="sm" className="text-[#6a5a3f] hover:bg-[#faf8f0]">
+                  <Button variant="ghost" size="sm" className="text-warm-brown-700 hover:bg-cream-200">
                     <Settings className="w-4 h-4 mr-2" />
                     Profile
                   </Button>
@@ -116,10 +116,10 @@ export default function DashboardLayout({
               </div>
               
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-[#e4a91a] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-accent-gold-600 flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-sm text-[#6a5a3f]">
+                <span className="text-sm text-warm-brown-700">
                   {user.firstName || user.emailAddresses[0]?.emailAddress}
                 </span>
               </div>

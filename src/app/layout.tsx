@@ -19,12 +19,12 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} bg-[#fefefe] min-h-screen flex flex-col`}>
+        <body className={`${inter.className} bg-cream-50 min-h-screen flex flex-col`}>
           <NotificationProvider>
             <main className="flex-1">
               {children}
             </main>
-            <footer className="text-center py-6 text-sm text-[#9a8558] border-t border-[#f5f1e6] bg-[#fdfcf9]">
+            <footer className="text-center py-6 text-sm text-warm-brown-600 border-t border-cream-300 bg-cream-100">
               © 2024 Talent Scout ZA - Created by Leon Jordaan
             </footer>
           </NotificationProvider>

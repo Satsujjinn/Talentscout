@@ -76,8 +76,8 @@ export default function DashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#e4a91a] mx-auto mb-4"></div>
-          <p className="text-[#6a5a3f]">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-gold-600 mx-auto mb-4"></div>
+          <p className="text-warm-brown-700">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -90,11 +90,11 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-[#fefdf8] to-[#fdfcf9] rounded-lg p-6 border border-[#f5f1e6]">
-        <h1 className="text-3xl font-bold text-[#6a5a3f] mb-2">
+      <div className="bg-gradient-to-r from-accent-gold-50 to-cream-100 rounded-lg p-6 border border-cream-300">
+        <h1 className="text-3xl font-bold text-warm-brown-900 mb-2">
           Welcome back, {user.firstName || "User"}!
         </h1>
-        <p className="text-[#9a8558]">
+        <p className="text-warm-brown-700">
           {userRole === "recruiter" 
             ? "Discover talented athletes and build your team."
             : "Connect with recruiters and showcase your talent."
@@ -105,17 +105,17 @@ export default function DashboardPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Link href="/dashboard/discover">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer bg-[#fefefe] border-[#f5f1e6]">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer bg-cream-50 border-cream-300">
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-2">
-                <div className="p-2 rounded-lg bg-[#fef9e6]">
-                  <Search className="w-5 h-5 text-[#e4a91a]" />
+                <div className="p-2 rounded-lg bg-accent-gold-100">
+                  <Search className="w-5 h-5 text-accent-gold-600" />
                 </div>
-                <CardTitle className="text-lg text-[#6a5a3f]">Discover</CardTitle>
+                <CardTitle className="text-lg text-warm-brown-900">Discover</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-[#9a8558]">
+              <p className="text-sm text-warm-brown-700">
                 {userRole === "recruiter" 
                   ? "Find talented athletes"
                   : "Browse opportunities"
@@ -126,33 +126,33 @@ export default function DashboardPage() {
         </Link>
 
         <Link href="/dashboard/messages">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer bg-[#fefefe] border-[#f5f1e6]">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer bg-cream-50 border-cream-300">
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-2">
-                <div className="p-2 rounded-lg bg-[#fef9e6]">
-                  <MessageCircle className="w-5 h-5 text-[#e4a91a]" />
+                <div className="p-2 rounded-lg bg-accent-gold-100">
+                  <MessageCircle className="w-5 h-5 text-accent-gold-600" />
                 </div>
-                <CardTitle className="text-lg text-[#6a5a3f]">Messages</CardTitle>
+                <CardTitle className="text-lg text-warm-brown-900">Messages</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-[#9a8558]">View your conversations</p>
+              <p className="text-sm text-warm-brown-700">View your conversations</p>
             </CardContent>
           </Card>
         </Link>
 
         <Link href="/dashboard/requests">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer bg-[#fefefe] border-[#f5f1e6]">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer bg-cream-50 border-cream-300">
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-2">
-                <div className="p-2 rounded-lg bg-[#fef9e6]">
-                  <FileText className="w-5 h-5 text-[#e4a91a]" />
+                <div className="p-2 rounded-lg bg-accent-gold-100">
+                  <FileText className="w-5 h-5 text-accent-gold-600" />
                 </div>
-                <CardTitle className="text-lg text-[#6a5a3f]">Requests</CardTitle>
+                <CardTitle className="text-lg text-warm-brown-900">Requests</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-[#9a8558]">
+              <p className="text-sm text-warm-brown-700">
                 {userRole === "recruiter" 
                   ? "Manage your requests"
                   : "Review incoming requests"
@@ -163,17 +163,17 @@ export default function DashboardPage() {
         </Link>
 
         <Link href="/dashboard/profile">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer bg-[#fefefe] border-[#f5f1e6]">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer bg-cream-50 border-cream-300">
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-2">
-                <div className="p-2 rounded-lg bg-[#fef9e6]">
-                  <User className="w-5 h-5 text-[#e4a91a]" />
+                <div className="p-2 rounded-lg bg-accent-gold-100">
+                  <User className="w-5 h-5 text-accent-gold-600" />
                 </div>
-                <CardTitle className="text-lg text-[#6a5a3f]">Profile</CardTitle>
+                <CardTitle className="text-lg text-warm-brown-900">Profile</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-[#9a8558]">Update your profile</p>
+              <p className="text-sm text-warm-brown-700">Update your profile</p>
             </CardContent>
           </Card>
         </Link>
@@ -182,49 +182,49 @@ export default function DashboardPage() {
       {/* Stats Section */}
       {userRole === "recruiter" && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="bg-[#fefefe] border-[#f5f1e6]">
+          <Card className="bg-cream-50 border-cream-300">
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-2">
-                <div className="p-2 rounded-lg bg-[#fef9e6]">
-                  <Users className="w-5 h-5 text-[#e4a91a]" />
+                <div className="p-2 rounded-lg bg-accent-gold-100">
+                  <Users className="w-5 h-5 text-accent-gold-600" />
                 </div>
-                <CardTitle className="text-lg text-[#6a5a3f]">Total Athletes</CardTitle>
+                <CardTitle className="text-lg text-warm-brown-900">Total Athletes</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-[#6a5a3f]">
+              <p className="text-2xl font-bold text-warm-brown-900">
                 {stats.totalAthletes || 0}
               </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-[#fefefe] border-[#f5f1e6]">
+          <Card className="bg-cream-50 border-cream-300">
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-2">
-                <div className="p-2 rounded-lg bg-[#fef9e6]">
-                  <FileText className="w-5 h-5 text-[#e4a91a]" />
+                <div className="p-2 rounded-lg bg-accent-gold-100">
+                  <FileText className="w-5 h-5 text-accent-gold-600" />
                 </div>
-                <CardTitle className="text-lg text-[#6a5a3f]">Pending Requests</CardTitle>
+                <CardTitle className="text-lg text-warm-brown-900">Pending Requests</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-[#6a5a3f]">
+              <p className="text-2xl font-bold text-warm-brown-900">
                 {stats.pendingRequests || 0}
               </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-[#fefefe] border-[#f5f1e6]">
+          <Card className="bg-cream-50 border-cream-300">
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-2">
-                <div className="p-2 rounded-lg bg-[#fef9e6]">
-                  <TrendingUp className="w-5 h-5 text-[#e4a91a]" />
+                <div className="p-2 rounded-lg bg-accent-gold-100">
+                  <TrendingUp className="w-5 h-5 text-accent-gold-600" />
                 </div>
-                <CardTitle className="text-lg text-[#6a5a3f]">Active Matches</CardTitle>
+                <CardTitle className="text-lg text-warm-brown-900">Active Matches</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-[#6a5a3f]">
+              <p className="text-2xl font-bold text-warm-brown-900">
                 {stats.activeMatches || 0}
               </p>
             </CardContent>
