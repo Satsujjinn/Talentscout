@@ -173,8 +173,7 @@ export default function MessagesPage() {
     return (
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-gold-600 mx-auto mb-4"></div>
-          <p className="text-warm-brown-700">Loading messages...</p>
+          <div className="text-warm-brown-500 text-xl">Loading...</div>
         </div>
       </div>
     );
@@ -207,13 +206,10 @@ export default function MessagesPage() {
 
       {acceptedMatches.length === 0 ? (
         <div className="text-center py-16">
-          <div className="w-24 h-24 bg-accent-gold-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <MessageCircle className="w-12 h-12 text-accent-gold-600" />
+          <div className="text-warm-brown-500 text-xl mb-4">
+            No accepted matches yet
           </div>
-          <h3 className="text-xl font-semibold text-warm-brown-900 mb-2">
-            No Accepted Matches Yet
-          </h3>
-          <p className="text-warm-brown-700 mb-4 max-w-md mx-auto">
+          <p className="text-warm-brown-400 mb-6">
             You'll be able to chat here once you accept match requests from recruiters or athletes accept your requests. 
             Start by browsing athletes and sending match requests!
           </p>

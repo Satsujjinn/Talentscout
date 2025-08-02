@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { athleteId, message } = await request.json();
+    const { athleteId } = await request.json();
 
     if (!athleteId) {
       return NextResponse.json(

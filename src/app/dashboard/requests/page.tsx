@@ -55,15 +55,10 @@ export default async function RequestsPage() {
 
       {formattedRequests.length === 0 ? (
         <div className="text-center py-16">
-          <div className="w-24 h-24 bg-accent-gold-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-12 h-12 text-accent-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
+          <div className="text-warm-brown-500 text-xl mb-4">
+            No requests sent yet
           </div>
-          <h3 className="text-xl font-semibold text-warm-brown-900 mb-2">
-            No Requests Sent Yet
-          </h3>
-          <p className="text-warm-brown-700 mb-4 max-w-md mx-auto">
+          <p className="text-warm-brown-400 mb-6">
             Start by browsing athletes in the Discover section and sending match requests to talented players you'd like to connect with.
           </p>
           <Link 
