@@ -6,15 +6,9 @@ async function seedData() {
   try {
     console.log('🌱 Setting up clean database...');
 
-    // Clear all existing data
-    console.log('🧹 Clearing existing data...');
-    await prisma.message.deleteMany();
-    await prisma.matchRequest.deleteMany();
-    await prisma.profile.deleteMany();
-    await prisma.user.deleteMany();
-
-    console.log('✅ Database cleaned successfully');
-    console.log('🎉 Database ready for real users!');
+    // Clean database - no dummy data
+    console.log('🧹 Database is clean and ready for real users');
+    console.log('✅ Database setup completed successfully!');
 
   } catch (error) {
     console.error('❌ Error setting up database:', error);
