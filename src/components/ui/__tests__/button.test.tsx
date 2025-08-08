@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { Button } from '../button'
 
 describe('Button', () => {
@@ -13,13 +14,13 @@ describe('Button', () => {
     expect(button).toHaveClass('custom-class')
   })
 
-  it('handles click events', () => {
+  it('handles click events', async () => {
     const handleClick = jest.fn()
     render(<Button onClick={handleClick}>Click me</Button>)
-    
+
     const button = screen.getByRole('button', { name: /click me/i })
-    button.click()
-    
+    await userEvent.click(button)
+
     expect(handleClick).toHaveBeenCalledTimes(1)
   })
 
@@ -27,6 +28,17 @@ describe('Button', () => {
     render(<Button disabled>Click me</Button>)
     const button = screen.getByRole('button', { name: /click me/i })
     expect(button).toBeDisabled()
+  })
+
+  it('does not call onClick when disabled', async () => {
+    const handleClick = jest.fn()
+    render(
+      <Button disabled onClick={handleClick}>
+        Click me
+      </Button>
+    )
+    await userEvent.click(screen.getByRole('button', { name: /click me/i }))
+    expect(handleClick).not.toHaveBeenCalled()
   })
 
   it('renders with different variants', () => {
