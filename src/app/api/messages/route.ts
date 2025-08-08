@@ -12,35 +12,58 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const matchRequestId = searchParams.get("matchRequestId");
 
-    if (!matchRequestId) {
-      return NextResponse.json({ error: "Match request ID required" }, { status: 400 });
+    if (matchRequestId) {
+      // Verify the user is part of this match request
+      const matchRequest = await prisma.matchRequest.findUnique({
+        where: { id: matchRequestId },
+        include: {
+          athlete: true,
+          recruiter: true,
+        },
+      });
+
+      if (!matchRequest) {
+        return NextResponse.json({ error: "Match request not found" }, { status: 404 });
+      }
+
+      if (matchRequest.athleteId !== user.id && matchRequest.recruiterId !== user.id) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      // Only allow messages if the request is accepted
+      if (matchRequest.status !== "accepted") {
+        return NextResponse.json({ error: "Match request not accepted" }, { status: 403 });
+      }
+
+      // Fetch messages for this match
+      const messages = await prisma.message.findMany({
+        where: { matchId: matchRequestId },
+        include: {
+          sender: true,
+        },
+        orderBy: { createdAt: "asc" },
+      });
+
+      return NextResponse.json(messages);
     }
 
-    // Verify the user is part of this match request
-    const matchRequest = await prisma.matchRequest.findUnique({
-      where: { id: matchRequestId },
-      include: {
-        athlete: true,
-        recruiter: true,
+    // If no matchRequestId is provided, return all messages for the user
+    const userMatches = await prisma.matchRequest.findMany({
+      where: {
+        OR: [{ athleteId: user.id }, { recruiterId: user.id }],
+        status: "accepted",
       },
+      select: { id: true },
     });
 
-    if (!matchRequest) {
-      return NextResponse.json({ error: "Match request not found" }, { status: 404 });
+    const matchIds = userMatches.map((m) => m.id);
+
+    if (matchIds.length === 0) {
+      return NextResponse.json([]);
     }
 
-    if (matchRequest.athleteId !== user.id && matchRequest.recruiterId !== user.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // Only allow messages if the request is accepted
-    if (matchRequest.status !== "accepted") {
-      return NextResponse.json({ error: "Match request not accepted" }, { status: 403 });
-    }
-
-    // Fetch messages for this match
     const messages = await prisma.message.findMany({
-      where: { matchId: matchRequestId },
+      where: { matchId: { in: matchIds } },
       include: {
         sender: true,
       },

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ requestId: string }> }
+  { params }: { params: { requestId: string } }
 ) {
   try {
     const user = await currentUser();
@@ -19,7 +19,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Invalid status" }, { status: 400 });
     }
 
-    const { requestId } = await params;
+    const { requestId } = params;
 
     // Get the match request
     const matchRequest = await prisma.matchRequest.findUnique({
