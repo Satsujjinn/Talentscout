@@ -97,15 +97,17 @@ class SocketManager {
   subscribeToMatchRequests(callback: MatchRequestCallback) {
     if (!this.socket) return;
 
-    this.socket.on('match-request', callback);
-    this.matchRequestCallbacks.set('match-request', callback);
+    // Listen for new match requests using the server's emitted event name
+    this.socket.on('new-match-request', callback);
+    this.matchRequestCallbacks.set('new-match-request', callback);
   }
 
   unsubscribeFromMatchRequests() {
     if (!this.socket) return;
 
-    this.socket.off('match-request');
-    this.matchRequestCallbacks.delete('match-request');
+    // Remove listener for new match requests
+    this.socket.off('new-match-request');
+    this.matchRequestCallbacks.delete('new-match-request');
   }
 
   sendMessage(matchId: string, message: { content: string }) {
